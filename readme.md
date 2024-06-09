@@ -1,6 +1,14 @@
 # Obfo (Object Form)
 
-Convert forms into nested JavaScript objects.
+<img src="./logo.webp" style="width:256px; height:256px">
+
+Convert HTML Forms into nested JavaScript objects.
+
+## Installation
+
+```shell
+npm install obfo
+```
 
 ## Usage
 
