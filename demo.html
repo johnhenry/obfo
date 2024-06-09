@@ -1,0 +1,162 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object form</title>
+  </head>
+  <body>
+    <form id="test-form" data-obfo-container-type="[]">
+      <div data-obfo-container-type="{}">
+        <fieldset>
+          <label>
+            Pick me
+            <input name="pick me" type="radio" data-obfo-cast="checkbox" />
+          </label>
+        </fieldset>
+        <fieldset data-obfo-container-type="{}" data-obfo-container-name="name">
+          <h2>Name</h2>
+          <lable
+            >Last Name
+            <input
+              name="last"
+              placeholder="Your Last Name"
+              value="Doe" /></lable
+          >,
+          <lable
+            >First Name
+            <input name="first" placeholder="Your First Name" value="Jon"
+          /></lable>
+          <lable
+            >Middle Initial
+            <input name="middle" placeholder="Your Middle Initial"
+          /></lable>
+        </fieldset>
+        <fieldset>
+          <h2>Birthdate</h2>
+          <lable>
+            <input
+              name="birthdate"
+              type="date"
+              placeholder="Apartment"
+              value="2000-01-01"
+              data-obfo-cast
+          /></lable>
+          <lable>
+            <input
+              name="time"
+              type="time"
+              placeholder="Apartment"
+              value="2000-01-01"
+              data-obfo-cast
+          /></lable>
+          <lable>
+            <input
+              name="age"
+              type="number"
+              placeholder="Apartment"
+              min="0"
+              value="20"
+              max="100"
+              data-obfo-cast
+          /></lable>
+        </fieldset>
+        <fieldset
+          data-obfo-container-type="{}"
+          data-obfo-container-name="address"
+        >
+          <h2>Address</h2>
+          <lable
+            >Street Number
+            <input name="number" placeholder="Street Number" value="1234"
+          /></lable>
+          <lable
+            >Street Name
+            <input name="name" placeholder="Street Name" value="Fake St"
+          /></lable>
+          <lable
+            >Apartment <input name="middle" placeholder="Apartment " value="A"
+          /></lable>
+        </fieldset>
+        <fieldset
+          data-obfo-container-type="[]"
+          data-obfo-container-name="media"
+        >
+          <div><img alt="" /><input type="hidden" value="abc.jpg" /></div>
+          <div><img alt="" /><input type="hidden" value="def.jpg" /></div>
+          <div><img alt="" /><input type="hidden" value="ghi.jpg" /></div>
+        </fieldset>
+        <fieldset
+          data-obfo-container-name="food preferences"
+          data-obfo-container-type="{}"
+        >
+          <h2>Meal Preferences</h2>
+          <label>
+            Vegetarian
+            <input
+              name="vegetarian"
+              type="checkbox"
+              data-obfo-cast="checkbox"
+            />
+          </label>
+          <div
+            data-obfo-container-name="allergies"
+            data-obfo-container-type="{}"
+          >
+            <label>
+              Peanuts
+              <input type="checkbox" name="peanuts" data-obfo-cast />
+            </label>
+            <label>
+              Shellfish
+              <input type="checkbox" name="shellfish" data-obfo-cast />
+            </label>
+            <label>
+              Dairy
+              <input type="checkbox" name="dairy" data-obfo-cast />
+            </label>
+            <label>
+              Gluten
+              <input type="checkbox" name="gluten" data-obfo-cast />
+            </label>
+          </div>
+        </fieldset>
+      </div>
+      <button id="submit-button" type="submit" name="submit">Submit</button>
+      <button
+        id="submit-button"
+        type="submit"
+        name="submit"
+        value="Submitted with Value"
+      >
+        Submit w/Val
+      </button>
+    </form>
+    <script type="module">
+      import FormObject from "./index.mjs";
+      const ListenForBubbledEvents = (
+        parent,
+        childSelector,
+        event,
+        callback
+      ) => {
+        return parent.addEventListener(event, (e) => {
+          if (e.target.matches(childSelector)) {
+            callback(e);
+          }
+        });
+      };
+      const form = document.getElementById("test-form");
+      const submit = (event) => {
+        const { target } = event;
+        event.preventDefault();
+        const object = FormObject(form, {
+          submit: target.hasAttribute("value") && target,
+        });
+        console.log(object);
+        console.log(JSON.stringify(object, null, " "));
+      };
+      // FORM.addEventListener("submit", SUBMIT);
+      ListenForBubbledEvents(form, "[type=submit]", "click", submit);
+    </script>
+  </body>
+</html>
