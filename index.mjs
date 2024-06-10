@@ -88,9 +88,18 @@ const FormObject = (
   const containerType = element.getAttribute("data-obfo-container-type");
   const tag = element.tagName.toLowerCase();
   if (isInputElement(element)) {
-    if (tag === "button" && element !== options.submit) {
-      return;
+    if (element !== options.submit) {
+      if (tag === "button") {
+        return;
+      }
+      if (element.type === "submit") {
+        return;
+      }
+      if (element.type === "image") {
+        return;
+      }
     }
+
     const value = parseValue(element, cast);
     if (!parent) {
       return value;

@@ -3,6 +3,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Object form</title>
+    <style>
+      input[type="image"] {
+        width: 64px;
+        height: 64px;
+      }
+    </style>
   </head>
   <body>
     <form id="test-form" data-obfo-container-type="[]">
@@ -74,13 +80,14 @@
             <input name="name" placeholder="Street Name" value="Fake St"
           /></lable>
           <lable
-            >Apartment <input name="middle" placeholder="Apartment " value="A"
+            >Apartment <input name="apt" placeholder="Apartment " value="A"
           /></lable>
         </fieldset>
         <fieldset
           data-obfo-container-type="[]"
           data-obfo-container-name="media"
         >
+          <h2>Media (Hidden)</h2>
           <div><img alt="" /><input type="hidden" value="abc.jpg" /></div>
           <div><img alt="" /><input type="hidden" value="def.jpg" /></div>
           <div><img alt="" /><input type="hidden" value="ghi.jpg" /></div>
@@ -102,6 +109,7 @@
             data-obfo-container-name="allergies"
             data-obfo-container-type="{}"
           >
+            <h3>Allergies</h3>
             <label>
               Peanuts
               <input type="checkbox" name="peanuts" data-obfo-cast />
@@ -130,7 +138,15 @@
       >
         Submit w/Val
       </button>
+      <input
+        alt="Submit with Image"
+        type="image"
+        name="submit"
+        value="Submitted with Image"
+        src="./logo.webp"
+      />
     </form>
+    <pre id="output"></pre>
     <script type="module">
       import FormObject from "./index.mjs";
       const ListenForBubbledEvents = (
@@ -139,24 +155,41 @@
         event,
         callback
       ) => {
-        return parent.addEventListener(event, (e) => {
+        const handler = (e) => {
           if (e.target.matches(childSelector)) {
             callback(e);
           }
-        });
+        };
+        parent.addEventListener(event, handler);
+        return handler;
       };
       const form = document.getElementById("test-form");
+      const output = document.getElementById("output");
       const submit = (event) => {
         const { target } = event;
         event.preventDefault();
         const object = FormObject(form, {
           submit: target.hasAttribute("value") && target,
+        }).map((object) => {
+          // if (object["food preferences"]) {
+          //   object["food preferences"].allergies = Object.entries(
+          //     object["food preferences"].allergies
+          //   )
+          //     .filter(([key, value]) => value)
+          //     .map(([key, value]) => key);
+          // }
+          return object;
         });
         console.log(object);
-        console.log(JSON.stringify(object, null, " "));
+        output.textContent = JSON.stringify(object, null, " ");
       };
-      // FORM.addEventListener("submit", SUBMIT);
-      ListenForBubbledEvents(form, "[type=submit]", "click", submit);
+      // form.addEventListener("submit", submit);
+      ListenForBubbledEvents(
+        form,
+        "button,[type=submit],[type=image]",
+        "click",
+        submit
+      );
     </script>
   </body>
 </html>
