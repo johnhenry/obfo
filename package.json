@@ -1,6 +1,6 @@
 {
   "name": "obfo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Convert HTML Forms into nested JavaScript objects.",
   "main": "index.mjs",
   "repository": {

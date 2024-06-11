@@ -87,6 +87,11 @@ console.log(ob); // logs ["Jon", "Doe"]
 
 This attribute is used as the key if the container is a direct child of a dictionary.
 
+### data-obfo-value
+
+This attribute is used to extract the text of a non-input element to use as a value.
+It should be used in conjunction with `data-obfo-name` where a key is required.
+
 ### data-obfo-cast
 
 The `data-obfo-cast` attribute casts the input value to a specific type. The available types are:
