@@ -11,15 +11,19 @@
     </style>
   </head>
   <body>
-    <form id="test-form" data-obfo-container-type="[]">
-      <div data-obfo-container-type="{}">
+    <form id="test-form" data-obfo-container="[]">
+      <div data-obfo-container="{}">
+        <p data-obfo-value data-obfo-name="description" contenteditable="">
+          This is a description
+        </p>
+
         <fieldset>
           <label>
             Pick me
             <input name="pick me" type="radio" data-obfo-cast="checkbox" />
           </label>
         </fieldset>
-        <fieldset data-obfo-container-type="{}" data-obfo-container-name="name">
+        <fieldset data-obfo-container="{}" data-obfo-name="name">
           <h2>Name</h2>
           <lable
             >Last Name
@@ -66,10 +70,7 @@
               data-obfo-cast
           /></lable>
         </fieldset>
-        <fieldset
-          data-obfo-container-type="{}"
-          data-obfo-container-name="address"
-        >
+        <fieldset data-obfo-container="{}" data-obfo-name="address">
           <h2>Address</h2>
           <lable
             >Street Number
@@ -83,19 +84,13 @@
             >Apartment <input name="apt" placeholder="Apartment " value="A"
           /></lable>
         </fieldset>
-        <fieldset
-          data-obfo-container-type="[]"
-          data-obfo-container-name="media"
-        >
+        <fieldset data-obfo-container="[]" data-obfo-name="media">
           <h2>Media (Hidden)</h2>
           <div><img alt="" /><input type="hidden" value="abc.jpg" /></div>
           <div><img alt="" /><input type="hidden" value="def.jpg" /></div>
           <div><img alt="" /><input type="hidden" value="ghi.jpg" /></div>
         </fieldset>
-        <fieldset
-          data-obfo-container-name="food preferences"
-          data-obfo-container-type="{}"
-        >
+        <fieldset data-obfo-name="food preferences" data-obfo-container="{}">
           <h2>Meal Preferences</h2>
           <label>
             Vegetarian
@@ -105,10 +100,7 @@
               data-obfo-cast="checkbox"
             />
           </label>
-          <div
-            data-obfo-container-name="allergies"
-            data-obfo-container-type="{}"
-          >
+          <div data-obfo-name="allergies" data-obfo-container="{}">
             <h3>Allergies</h3>
             <label>
               Peanuts

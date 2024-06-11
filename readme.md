@@ -13,7 +13,7 @@ npm install obfo
 ## Usage
 
 ```html
-<form id="fo" data-obfo-container-type="{}">
+<form id="fo" data-obfo-container="{}">
   <input name="first" value="Jon" />
   <input name="last" value="Doe" />
 </form>
@@ -30,27 +30,27 @@ console.log(ob); // logs { first: "Jon", last: "Doe" }
 
 To handle the differences between HTML forms and JavaScript object structures, we use data attributes to define container behavior.
 
-### data-obfo-container-type
+### data-obfo-container
 
-The `data-obfo-container-type` attribute groups elements into dictionaries (`{}`) or arrays (`[]`) when converting a form to an object.
+The `data-obfo-container` attribute groups elements into dictionaries (`{}`) or arrays (`[]`) when converting a form to an object.
 
 An element is considered a "direct child" of a container if:
 
-- It is an input (`input`, `textarea`, `select`) element or has a `data-obfo-container-type` attribute.
+- It is an input (`input`, `textarea`, `select`) element or has a `data-obfo-container` attribute.
 - There are no other elements between the container and the element.
 
-Elements that are not inputs or do not have the `data-obfo-container-type` attribute are ignored. Unless specified with the `option.submit` parameter, `button` elements are also ignored.
+Elements that are not inputs or do not have the `data-obfo-container` attribute are ignored. Unless specified with the `option.submit` parameter, `button` elements are also ignored.
 
-Note: The `data-obfo-container-type` attribute must be set on the top form element.
+Note: The `data-obfo-container` attribute must be set on the top form element.
 
-#### data-obfo-container-type: {}
+#### data-obfo-container: {}
 
-Direct children of `data-obfo-container-type="{}"` must have a `name` or `data-obfo-container-name` attribute set.
+Direct children of `data-obfo-container="{}"` must have a `name` or `data-obfo-name` attribute set.
 
 Example:
 
 ```html
-<form id="fo" data-obfo-container-type="{}">
+<form id="fo" data-obfo-container="{}">
   <input name="first" value="Jon" />
   <input name="last" value="Doe" />
 </form>
@@ -63,14 +63,14 @@ const ob = obfo(fo);
 console.log(ob); // logs { first: "Jon", last: "Doe" }
 ```
 
-#### data-obfo-container-type: []
+#### data-obfo-container: []
 
-`name` and `data-obfo-container-name` attributes on direct children of `data-obfo-container-type="[]"` are ignored.
+`name` and `data-obfo-name` attributes on direct children of `data-obfo-container="[]"` are ignored.
 
 Example:
 
 ```html
-<form id="fo" data-obfo-container-type="[]">
+<form id="fo" data-obfo-container="[]">
   <input name="first" value="Jon" />
   <input name="last" value="Doe" />
 </form>
@@ -83,7 +83,7 @@ const ob = obfo(fo);
 console.log(ob); // logs ["Jon", "Doe"]
 ```
 
-### data-obfo-container-name
+### data-obfo-name
 
 This attribute is used as the key if the container is a direct child of a dictionary.
 
@@ -116,10 +116,10 @@ Example:
 Example with nested objects:
 
 ```html
-<form id="fo" data-obfo-container-type="{}">
+<form id="fo" data-obfo-container="{}">
   <input name="first" value="Jon" />
   <input name="last" value="Doe" />
-  <div data-obfo-container-type="{}" data-obfo-container-name="address">
+  <div data-obfo-container="{}" data-obfo-name="address">
     <input name="street" value="123 Main St" />
     <input name="city" value="Anytown" />
   </div>
@@ -136,8 +136,8 @@ console.log(ob); // logs { first: "Jon", last: "Doe", address: { street: "123 Ma
 Example with arrays:
 
 ```html
-<form id="fo" data-obfo-container-type="{}">
-  <div data-obfo-container-type="[]" data-obfo-container-name="tags">
+<form id="fo" data-obfo-container="{}">
+  <div data-obfo-container="[]" data-obfo-name="tags">
     <input value="JavaScript" />
     <input value="HTML" />
     <input value="CSS" />

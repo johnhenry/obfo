@@ -29,7 +29,10 @@ const isInputElement = (element) => {
  * @throws {Error} If the cast type is "file" and the element is not an input[type=file].
  */
 const DEFAULT_PARSER = (element, cast = "string") => {
-  const { value } = element;
+  const value = element.hasAttribute("data-obfo-value")
+    ? element.innerText
+    : element.value;
+
   const castType = cast === "" ? element.type : cast;
 
   switch (castType) {
@@ -60,6 +63,11 @@ const DEFAULT_PARSER = (element, cast = "string") => {
       }
       return element.files[0] || null;
     case "files":
+      if (element.type !== "file") {
+        throw new Error(
+          "data-obfo-cast='files' can only be used with input[type=file]"
+        );
+      }
       return element.files;
     case "string":
     default:
@@ -75,7 +83,7 @@ const DEFAULT_PARSER = (element, cast = "string") => {
  * @param {Function} [options.parse] - The parsing function to use. Defaults to `DEFAULT_PARSER`.
  * @param {Object} [parent] - The parent object to attach the parsed values to.
  * @returns {any} - The parsed value or the parent object with attached values.
- * @throws {Error} - Throws an error if `data-obfo-container-name` is missing for nested objects.
+ * @throws {Error} - Throws an error if `data-obfo-name` is missing for nested objects.
  */
 const FormObject = (
   element,
@@ -83,11 +91,11 @@ const FormObject = (
   parent = null
 ) => {
   const parseValue = options.parse || DEFAULT_PARSER;
-  const name = element.name || element.getAttribute("data-obfo-container-name");
+  const name = element.name || element.getAttribute("data-obfo-name");
   const cast = element.getAttribute("data-obfo-cast");
-  const containerType = element.getAttribute("data-obfo-container-type");
+  const containerType = element.getAttribute("data-obfo-container");
   const tag = element.tagName.toLowerCase();
-  if (isInputElement(element)) {
+  if (isInputElement(element) || element.hasAttribute("data-obfo-value")) {
     if (element !== options.submit) {
       if (tag === "button") {
         return;
@@ -99,7 +107,6 @@ const FormObject = (
         return;
       }
     }
-
     const value = parseValue(element, cast);
     if (!parent) {
       return value;
@@ -110,9 +117,7 @@ const FormObject = (
     }
     if (parent) {
       if (name === null) {
-        throw new Error(
-          "data-obfo-container-name is required for nested objects"
-        );
+        throw new Error("data-obfo-name is required for nested objects");
       }
       parent[name] = value;
       return parent;
@@ -132,9 +137,7 @@ const FormObject = (
     }
     if (parent) {
       if (name === null) {
-        throw new Error(
-          "data-obfo-container-name is required for nested objects"
-        );
+        throw new Error("data-obfo-name is required for nested objects");
       }
       parent[name] = value;
       return parent;
