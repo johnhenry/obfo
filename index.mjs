@@ -1,15 +1,4 @@
 "use strict";
-
-/**
- * Array of HTML element classes that represent input elements.
- * @type {Array<Function>}
- */
-const INPUT_ELEMENTS = [
-  HTMLInputElement,
-  HTMLTextAreaElement,
-  HTMLSelectElement,
-  HTMLButtonElement,
-];
 /**
  * Checks if the given element is an input element.
  *
@@ -17,6 +6,16 @@ const INPUT_ELEMENTS = [
  * @returns {boolean} - Returns true if the element is an input element, otherwise false.
  */
 const isInputElement = (element) => {
+  /**
+   * Array of HTML element classes that represent input elements.
+   * @type {Array<Function>}
+   */
+  const INPUT_ELEMENTS = [
+    HTMLInputElement,
+    HTMLTextAreaElement,
+    HTMLSelectElement,
+    HTMLButtonElement,
+  ];
   return INPUT_ELEMENTS.some((type) => element instanceof type);
 };
 
