@@ -119,6 +119,16 @@
             </label>
           </div>
         </fieldset>
+        <fieldset>
+          <h2>Files</h2>
+          <label>
+            Single file <input type="file" name="file" data-obfo-cast />
+          </label>
+          <label>
+            Multiple Files file
+            <input type="file" name="files" multiple data-obfo-cast="files" />
+          </label>
+        </fieldset>
       </div>
       <button id="submit-button" type="submit" name="submit">Submit</button>
       <button
@@ -139,7 +149,7 @@
     </form>
     <pre id="output"></pre>
     <script type="module">
-      import FormObject from "./index.mjs";
+      import obfo from "./index.mjs";
       const ListenForBubbledEvents = (
         parent,
         childSelector,
@@ -159,7 +169,7 @@
       const submit = (event) => {
         const { target } = event;
         event.preventDefault();
-        const object = FormObject(form, {
+        const object = obfo(form, {
           submit: target.hasAttribute("value") && target,
         }).map((object) => {
           // if (object["food preferences"]) {
