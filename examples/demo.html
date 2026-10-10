@@ -24,41 +24,41 @@
         </fieldset>
         <fieldset data-obfo-container="{}" data-obfo-name="name">
           <h2>Name</h2>
-          <lable
+          <label
             >Last Name
             <input
               name="last"
               placeholder="Your Last Name"
-              value="Doe" /></lable
+              value="Doe" /></label
           >,
-          <lable
+          <label
             >First Name
             <input name="first" placeholder="Your First Name" value="Jon"
-          /></lable>
-          <lable
+          /></label>
+          <label
             >Middle Initial
             <input name="middle" placeholder="Your Middle Initial"
-          /></lable>
+          /></label>
         </fieldset>
         <fieldset>
           <h2>Birthdate</h2>
-          <lable>
+          <label>
             <input
               name="birthdate"
               type="date"
               placeholder="Apartment"
               value="2000-01-01"
               data-obfo-cast
-          /></lable>
-          <lable>
+          /></label>
+          <label>
             <input
               name="time"
               type="time"
               placeholder="Apartment"
               value="2000-01-01"
               data-obfo-cast
-          /></lable>
-          <lable>
+          /></label>
+          <label>
             <input
               name="age"
               type="number"
@@ -67,21 +67,21 @@
               value="20"
               max="100"
               data-obfo-cast
-          /></lable>
+          /></label>
         </fieldset>
         <fieldset data-obfo-container="{}" data-obfo-name="address">
           <h2>Address</h2>
-          <lable
+          <label
             >Street Number
             <input name="number" placeholder="Street Number" value="1234"
-          /></lable>
-          <lable
+          /></label>
+          <label
             >Street Name
             <input name="name" placeholder="Street Name" value="Fake St"
-          /></lable>
-          <lable
+          /></label>
+          <label
             >Apartment <input name="apt" placeholder="Apartment " value="A"
-          /></lable>
+          /></label>
         </fieldset>
         <fieldset data-obfo-container="[]" data-obfo-name="media">
           <h2>Media (Hidden)</h2>
@@ -144,53 +144,39 @@
         type="image"
         name="submit"
         value="Submitted with Image"
-        src="./logo.webp"
+        src="../logo.webp"
       />
     </form>
+    <h2>On submit</h2>
     <pre id="output"></pre>
+    <h2>Live, with <code>cast: "auto"</code> (observe)</h2>
+    <pre id="live"></pre>
     <script type="module">
-      import obfo from "./index.mjs";
-      const ListenForBubbledEvents = (
-        parent,
-        childSelector,
-        event,
-        callback
-      ) => {
-        const handler = (e) => {
-          if (e.target.matches(childSelector)) {
-            callback(e);
-          }
-        };
-        parent.addEventListener(event, handler);
-        return handler;
-      };
+      // Serve the repo root (for example `npx serve .`) and open
+      // /examples/demo.html: the import is relative to this file.
+      import obfo, { observe } from "../index.mjs";
       const form = document.getElementById("test-form");
       const output = document.getElementById("output");
-      const submit = (event) => {
-        const { target } = event;
+      const live = document.getElementById("live");
+      // Files and Dates don't survive JSON.stringify; show their names.
+      const show = (value) =>
+        JSON.stringify(
+          value,
+          (key, v) =>
+            v instanceof File ? `File(${v.name})` : v instanceof FileList ? [...v].map((f) => `File(${f.name})`) : v,
+          " "
+        );
+      form.addEventListener("submit", (event) => {
         event.preventDefault();
-        const object = obfo(form, {
-          submit: target.hasAttribute("value") && target,
-        }).map((object) => {
-          // if (object["food preferences"]) {
-          //   object["food preferences"].allergies = Object.entries(
-          //     object["food preferences"].allergies
-          //   )
-          //     .filter(([key, value]) => value)
-          //     .map(([key, value]) => key);
-          // }
-          return object;
-        });
+        // event.submitter is the button that was clicked; obfo reads it like an input.
+        const object = obfo(form, { submit: event.submitter });
         console.log(object);
-        output.textContent = JSON.stringify(object, null, " ");
-      };
-      // form.addEventListener("submit", submit);
-      ListenForBubbledEvents(
-        form,
-        "button,[type=submit],[type=image]",
-        "click",
-        submit
-      );
+        output.textContent = show(object);
+      });
+      observe(form, (value) => (live.textContent = show(value)), {
+        cast: "auto",
+        immediate: true,
+      });
     </script>
   </body>
 </html>
