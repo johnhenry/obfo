@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The family's concurrency-cancel block lives in the reusable workflow
+# (johnhenry/workflows ci.yml@v1, group ci-<workflow>-<ref>). Don't repeat it
+# here: the same group at both levels is rejected as a deadlock before the
+# run starts.
+
+jobs:
+  test:
+    uses: johnhenry/workflows/.github/workflows/ci.yml@v1
+    with:
+      node-versions: '["26"]'
+      os: '["ubuntu-latest"]'
+      # npm test: node:test + happy-dom, the README examples, the 0.0.9
+      # compatibility corpus, the .d.ts typecheck and the examples smoke test
+      # (npm run examples). Then the real-browser suite in Chromium, Firefox
+      # and WebKit.
+      gate-commands: |
+        npm test
+        npx playwright install --with-deps chromium firefox webkit
+        npm run test:browser
+        npm pack --dry-run
+
+  workflow-lint:
+    uses: johnhenry/workflows/.github/workflows/workflow-lint.yml@v1
